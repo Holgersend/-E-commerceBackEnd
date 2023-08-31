@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     res.status(200).json(categories);
   } catch (err) { 
   // be sure to include its associated Products
-  res.status(500).json({message: 'Not found!'});
+  res.status(500).json(err);
   }
 });
 
@@ -29,7 +29,7 @@ router.get('/:id', async (req, res) => {
     }
     res.status(200).json(category);
   } catch (err) {
-    res.status(500).json({message: `Not found!`});
+    res.status(500).json(err);
   }
   
 });
@@ -62,7 +62,7 @@ router.delete('/:id', async (req, res) => {
       where: {id: req.params.id},
     });
   } catch (err) {
-    res.status(500).json({message: `Failed to delete!`});
+    res.status(500).json(err);
   }
 });
 
