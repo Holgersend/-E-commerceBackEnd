@@ -6,7 +6,9 @@ const { Category, Product } = require('../../models');
 router.get('/', async (req, res) => {
   // find all categories
   try {
-    const categories = await Category.findAll({include: [{model: Product}]});
+    const categories = await Category.findAll({
+      include: [{model: Product}],
+    });
     res.status(200).json(categories);
   } catch (err) { 
   // be sure to include its associated Products
@@ -17,7 +19,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   try { 
-    const category = await Category.findByPk(req.params.id, {include: [{model: Product}]});
+    const category = await Category.findByPk(req.params.id, {
+      include: [{model: Product}],
+    });
     
     if (!category) {
       res.status(404).json({message:` ID provided not found`});
@@ -43,14 +47,23 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // update a category by its `id` value
   try {
-    const updateCategory= await Category.update(req.body, {where: { id: req.params.id}});
+    const updateCategory = await Category.update(req.body, {
+      where: { id: req.params.id},
+    });
   } catch (err) {
     res.status(500).json({message: `Failed to update!`});
   }
 });
 
-// router.delete('/:id', (req, res) => {
-//   // delete a category by its `id` value
-// });
+router.delete('/:id', async (req, res) => {
+  // delete a category by its `id` value
+  try {
+    const deleteCategory = await Category.destroy({
+      where: {id: req.params.id},
+    });
+  } catch (err) {
+    res.status(500).json({message: `Failed to delete!`});
+  }
+});
 
 module.exports = router;
