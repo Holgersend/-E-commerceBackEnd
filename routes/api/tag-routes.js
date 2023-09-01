@@ -11,17 +11,36 @@ router.get('/', async (req, res) => {
     });
     res.status(200).json(allTags);
   } catch (err) {
-    res.status(500).json({ message: "No tags found!"});
+    res.status(500).json({ message: 'No tags found!'});
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
-  // be sure to include its associated Product data
+  try { 
+    const allTags = await Tag.findByPk(req.params.id, {
+      include: [{ model: Product }],
+    });
+    if (!allTags) {
+      res.status(404).json({message: 'No Tag found with this ID!'});
+      return;
+    }
+    res.status(200).json(allTags);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new tag
+  try {
+    const newTag = await newTag.create({
+      reader_id: req.body.reader_id,
+    });
+    res.status(200).json(newTag);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
 
 router.put('/:id', (req, res) => {
